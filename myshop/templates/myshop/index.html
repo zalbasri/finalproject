@@ -1,0 +1,14 @@
+{% extends "myshop/layout.html" %}
+
+{% block title %}
+Shoes
+{% endblock %}
+
+{% block body %}
+{% for shoe in shoes %}
+<h3>{{ shoe.name }}</h3>
+<h3>{{ shoe.price }}</h3>
+<h3>{{ shoe.sizes }}</h3>
+<img src="{{ shoe.photo.url }}">
+{% endfor %}
+{% endblock %}
