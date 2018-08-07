@@ -1,0 +1,24 @@
+{% extends "myshop/layout.html" %}
+{% block title %}
+Login
+{% endblock %}
+{% block body %}
+<div class="wrapper bgded">
+  <section id="callback" class="hoc container clear">
+    <!-- ################################################################################################ -->
+    <div class="one_half first">
+      <div class="inspace-30 row3">
+        <h6 class="heading">Login</h6>
+        <form method="post" action="{% url 'login' %}">
+          <fieldset>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" value="submit">Login</button>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+    <!-- ################################################################################################ -->
+  </section>
+</div>
+{% endblock %}

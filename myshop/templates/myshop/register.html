@@ -1,0 +1,25 @@
+{% extends "myshop/layout.html" %}
+{% block title %}
+Register
+{% endblock %}
+{% block body %}
+<div class="wrapper bgded">
+  <section id="callback" class="hoc container clear">
+    <!-- ################################################################################################ -->
+    <div class="one_half first">
+      <div class="inspace-30 row3">
+        <h6 class="heading">Register</h6>
+        <p class="btmspace-30">{{ error }}</p>
+        <form method="post" action="{% url 'register' %}">
+          <fieldset>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" value="submit">Register</button>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+    <!-- ################################################################################################ -->
+  </section>
+</div>
+{% endblock %}

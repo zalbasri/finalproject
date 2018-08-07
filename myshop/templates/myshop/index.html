@@ -1,14 +1,46 @@
 {% extends "myshop/layout.html" %}
 
 {% block title %}
-Shoes
+My Shop
+{% endblock %}
+
+{% block pages %}
+  <div id="pageintro" class="hoc clear">
+    <!-- ################################################################################################ -->
+    <div class="flexslider basicslider">
+      <ul class="slides clear">
+        <li>
+          <article>
+            <p>Clothing & Footwear</p>
+            <h2 class="heading">My Shop</h2>
+          </article>
+        </li>
+        <li>
+          <article>
+            <h2 class="heading">Women's</h2>
+            <footer>
+              <ul class="nospace inline pushright">
+                <li><a class="btn" href="#">Shop Now</a></li>
+              </ul>
+            </footer>
+          </article>
+        </li>
+        <li>
+          <article>
+            <h2 class="heading">Men's</h2>
+            <footer>
+              <ul class="nospace inline pushright">
+                <li><a class="btn" href="#">Shop Now</a></li>
+              </ul>
+            </footer>
+          </article>
+        </li>
+      </ul>
+    </div>
+    <!-- ################################################################################################ -->
+  </div>
+  <!-- ################################################################################################ -->
 {% endblock %}
 
 {% block body %}
-{% for shoe in shoes %}
-<h3>{{ shoe.name }}</h3>
-<h3>{{ shoe.price }}</h3>
-<h3>{{ shoe.sizes }}</h3>
-<img src="{{ shoe.photo.url }}">
-{% endfor %}
 {% endblock %}
