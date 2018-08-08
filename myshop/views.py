@@ -209,28 +209,19 @@ def cart(request):
                 new_item = Cart.objects.create(user=user, product=product, size=size)
             del request.session['cart']
         except KeyError:
-            products = Cart.objects.filter(user=user).values()
+            items = Cart.objects.filter(user=user).values()
 
-        context = {
-            "products": Cart.objects.filter(user=user).values()
-        }
-
-        products = Cart.objects.filter(user=user).values()
-        for product in products:
-            print(product)
-            # name = p['name']
-            # price = p['price']
-            # print(name)
-            # print(price)
+        items = Cart.objects.filter(user=user).values()
     else:
-        cart = request.session.get('cart', [])
-        cart_list=[]
-        for item in cart:
-            product_id = item['product_id']
-            size = item['size']
-            product = Product.objects.get(pk = product_id)
-            cart_list.append({'product': product, 'size': size})
-        context = {
-            "products": cart_list
-        }
+        items = request.session.get('cart', [])
+
+    products=[]
+    for item in items:
+        product_id = item['product_id']
+        size = item['size']
+        product = Product.objects.get(pk = product_id)
+        products.append({'product': product, 'size': size})
+    context = {
+        "products": products
+    }
     return render(request, 'myshop/cart.html', context)

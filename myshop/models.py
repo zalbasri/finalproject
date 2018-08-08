@@ -28,9 +28,7 @@ class Comment(models.Model):
 
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
-    # product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=False, null=False)
-    item = models.CharField(max_length=100)
-    price = models.DecimalField(max_digits=5, decimal_places=2)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=False, null=False)
     size = models.CharField(max_length=5)
 
     def __str__(self):
