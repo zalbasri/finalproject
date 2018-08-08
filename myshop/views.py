@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, render_to_response
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from myshop.forms import RegisterationForm # registeration form created
-from .models import Product
+from .models import Product, Comment, Cart
+
 
 def index(request):
     user = request.user
@@ -32,6 +34,13 @@ def login_view(request):
 
 
 def logout_view(request):
+    cart = request.session.get('cart', [])
+    for item in cart:
+        product_id = item['product_id']
+        size = item['size']
+        product = Product.objects.get(pk = product_id)
+        user = request.user
+        new_item = Cart.objects.create(user=user, product=product, size=size)
     logout(request)
     return redirect('index')
 
@@ -109,7 +118,6 @@ def women_shoes(request):
     return render(request, "myshop/products.html", context)
 
 
-
 def women_activewear(request):
     context = {
         "title": "Women's Activewear",
@@ -150,7 +158,6 @@ def men_shoes(request):
     return render(request, "myshop/products.html", context)
 
 
-
 def men_activewear(request):
     context = {
         "title": "Men's Activewear",
@@ -167,9 +174,63 @@ def product(request, product_id):
     sizes = sizes.split() # https://stackoverflow.com/questions/19555472/change-a-string-of-integers-separated-by-spaces-to-a-list-of-int
     context = {
         "product": product,
-        "sizes": sizes
+        "sizes": sizes,
+        "comments": product.comments.all()
     }
     return render(request, "myshop/product.html", context)
 
 
-# def comment(request):
+def comment(request, product_id):
+    text = request.POST['comment']
+    product = Product.objects.get(pk = product_id)
+    user = request.user
+    comment = Comment.objects.create(user=user, product=product, text=text)
+    return HttpResponseRedirect(reverse('product', args=[product_id]))
+
+
+# https://groups.google.com/forum/#!topic/django-users/8uW5jDP3Fgw
+def add_to_cart(request, product_id):
+    size = request.POST['size']
+    cart = request.session.get('cart', [])
+    cart.append({'product_id': product_id, 'size': size})
+    request.session['cart']=cart
+    return HttpResponseRedirect(reverse('product', args=[product_id]))
+
+
+def cart(request):
+    if request.user.is_authenticated:
+        try:
+            cart = request.session.get('cart', [])
+            user = request.user
+            for item in cart:
+                product_id = item['product_id']
+                size = item['size']
+                product = Product.objects.get(pk = product_id)
+                new_item = Cart.objects.create(user=user, product=product, size=size)
+            del request.session['cart']
+        except KeyError:
+            products = Cart.objects.filter(user=user).values()
+
+        context = {
+            "products": Cart.objects.filter(user=user).values()
+        }
+
+        products = Cart.objects.filter(user=user).values()
+        for product in products:
+            print(product)
+            # name = p['name']
+            # price = p['price']
+            # print(name)
+            # print(price)
+    else:
+        cart = request.session.get('cart', [])
+        cart_list=[]
+        for item in cart:
+            product_id = item['product_id']
+            size = item['size']
+            product = Product.objects.get(pk = product_id)
+            cart_list.append({'product': product, 'size': size})
+        context = {
+            "products": cart_list
+        }
+    return render(request, 'myshop/cart.html', context)

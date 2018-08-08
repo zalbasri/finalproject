@@ -1,0 +1,14 @@
+{% extends "myshop/layout.html" %}
+
+{% block title %}
+Cart
+{% endblock %}
+
+{% block body %}
+{% for product in products %}
+<h3>{{ product.product.name }}</h3>
+<h3>{{ product.product.price }}</h3>
+<h3>{{ product.size }}</h3>
+<img src="{{ product.product.photo.url }}">
+{% endfor %}
+{% endblock %}
